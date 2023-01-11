@@ -1,0 +1,22 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{49BB32C1-48C9-47CE-A215-81B78867E5C7}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "CustomMeshPass",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "ModelingToolsEditorMode",
+			"Enabled": true,
+			"TargetAllowList": [
+				"Editor"
+			]
+		}
+	]
+}
