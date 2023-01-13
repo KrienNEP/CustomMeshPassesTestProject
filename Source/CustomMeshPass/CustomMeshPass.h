@@ -4,3 +4,15 @@
 
 #include "CoreMinimal.h"
 
+class FCustomMeshPassModule : public IModuleInterface
+{
+public:
+
+	/** IModuleInterface implementation */
+	virtual void StartupModule() override;
+
+	virtual bool IsGameModule() const override
+	{
+		return true;
+	}
+};

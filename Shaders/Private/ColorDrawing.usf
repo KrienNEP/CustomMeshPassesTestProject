@@ -1,0 +1,49 @@
+
+#include "/Engine/Private/Common.ush"
+
+#include "/Engine/Generated/Material.ush"
+#include "/Engine/Generated/VertexFactory.ush"
+
+struct FVSToPS
+{
+	FVertexFactoryInterpolantsVSToPS FactoryInterpolants;
+	float4	Position		: SV_POSITION;
+};
+
+#define VS_OUTPUT_TYPE FVSToPS
+
+#if VERTEXSHADER
+
+/** transform mesh as normal */
+void MainVS(
+	FVertexFactoryInput Input,
+	out VS_OUTPUT_TYPE Output
+	)
+{
+	ResolvedView = ResolveView();
+
+	FVertexFactoryIntermediates VFIntermediates = GetVertexFactoryIntermediates(Input);
+	float4 WorldPosition = VertexFactoryGetWorldPosition(Input, VFIntermediates);
+	float3x3 TangentToLocal = VertexFactoryGetTangentToLocal(Input, VFIntermediates);
+
+	FMaterialVertexParameters VertexParameters = GetMaterialVertexParameters(Input, VFIntermediates, WorldPosition.xyz, TangentToLocal);
+	
+	Output.Position = mul(WorldPosition, View.TranslatedWorldToClip);
+	Output.FactoryInterpolants = VertexFactoryGetInterpolantsVSToPS(Input, VFIntermediates, VertexParameters);
+
+}
+
+#endif // VERTEXSHADER
+
+// is called in MainPS() from PixelShaderOutputCommon.usf
+void FPixelShaderInOut_MainPS(
+	FVertexFactoryInterpolantsVSToPS FactoryInterpolants,
+	inout FPixelShaderIn In,
+	inout FPixelShaderOut Out)
+{
+    Out.MRT[0] = float4(0.0f, 1.0f, 0.0f, 1.0f);
+}
+
+#define PIXELSHADEROUTPUT_INTERPOLANTS 1
+#define PIXELSHADEROUTPUT_MRT0 1
+#include "/Engine/Private/PixelShaderOutputCommon.ush"
