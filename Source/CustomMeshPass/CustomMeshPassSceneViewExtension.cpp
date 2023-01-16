@@ -2,8 +2,9 @@
 
 #include "ColorMaterialMeshProcessor.h"
 #include "MeshPassProcessor.inl"
+#include "RendererUtils.h"
 #include "RenderGraphBuilder.h"
-#include "SceneRendering.h"
+#include "RenderGraphUtils.h"
 #include "Engine/TextureRenderTarget2D.h"
 #include "InstanceCulling/InstanceCullingContext.h"
 #include "Materials/MaterialRenderProxy.h"
@@ -73,27 +74,25 @@ void FCustomMeshPassSceneViewExtension::PrePostProcessPass_RenderThread(FRDGBuil
 	PassParameters->View = GetShaderParameters(View);
 	PassParameters->InstanceCulling = FInstanceCullingContext::CreateDummyInstanceCullingUniformBuffer(GraphBuilder);
 	PassParameters->RenderTargets[0] = FRenderTargetBinding(RenderTargetGraphBuilder, ERenderTargetLoadAction::EClear);
-
-	const FViewInfo& ViewInfo = static_cast<const FViewInfo&>(View);
-
+	
 	AddDrawDynamicMeshPass(
 		GraphBuilder,
 		RDG_EVENT_NAME("CustomMeshPass_66"),
 		PassParameters,
 		View,
-		ViewInfo.ViewRect,
-		[&ViewInfo](FDynamicPassMeshDrawListContext* DynamicMeshPassContext)
+		View.UnscaledViewRect,
+		[&View](FDynamicPassMeshDrawListContext* DynamicMeshPassContext)
 		{
 			FColorMaterialMeshProcessor PassMeshProcessor(
-				ViewInfo.Family->Scene->GetRenderScene(),
-				ViewInfo.GetFeatureLevel(),
-		        &ViewInfo,
+				View.Family->Scene->GetRenderScene(),
+				View.GetFeatureLevel(),
+		        &View,
 		        DynamicMeshPassContext);
 
-            const TArray<FViewExtensionMeshBatch>* MeshBatchesPtr = ViewInfo.SceneViewExtensionMeshBatches.Find(SomeCustomMeshPassId);
+            const TArray<FCustomMeshPassMeshBatch>* MeshBatchesPtr = GetMeshBatchesForCustomMeshPass(SomeCustomMeshPassId, View);
 			if (MeshBatchesPtr)
 			{
-				const TArray<FViewExtensionMeshBatch>& MeshBatches = *MeshBatchesPtr;
+				const TArray<FCustomMeshPassMeshBatch>& MeshBatches = *MeshBatchesPtr;
 
 				for (int32 MeshBatchIndex = 0; MeshBatchIndex < MeshBatches.Num(); ++MeshBatchIndex)
 				{

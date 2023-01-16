@@ -1,7 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-using System.IO;
-using UnrealBuildBase;
 using UnrealBuildTool;
 
 public class CustomMeshPass : ModuleRules
@@ -13,15 +11,6 @@ public class CustomMeshPass : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "RenderCore", "Renderer", "RHI" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
-
-        string RendererPrivatePath = Path.Combine(Unreal.EngineDirectory.FullName, "Source", "Runtime", "Renderer", "Private");
-
-        PrivateIncludePaths.AddRange(
-            new string[] {
-                // Hack used in GoogleARCoreRendering plugin module, which is authored by Epic. I guess it's sort of legal?
-                RendererPrivatePath
-            }
-        );
 
         // Uncomment if you are using Slate UI
         // PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
