@@ -43,7 +43,7 @@ FCustomMeshPassSceneViewExtension::FCustomMeshPassSceneViewExtension(const FAuto
 
 void FCustomMeshPassSceneViewExtension::SubscribeToCustomMeshVisibilityRelevancePass(FCustomMeshRelevanceCallbackDelegateMap& InOutCustomRelevanceCallbacks)
 {
-	InOutCustomRelevanceCallbacks.Add(SomeCustomMeshPassId, FCustomMeshRelevanceCallbackDelegate::CreateRaw(this, &FCustomMeshPassSceneViewExtension::CustomStaticMeshVisibilityRelevance_RenderThread));
+	InOutCustomRelevanceCallbacks.Add(SomeCustomMeshPassId, FCustomMeshRelevanceCallbackDelegate::CreateRaw(this, &FCustomMeshPassSceneViewExtension::CustomMeshVisibilityRelevance_RenderThread));
 }
 
 void FCustomMeshPassSceneViewExtension::PrePostProcessPass_RenderThread(FRDGBuilder& GraphBuilder, const FSceneView& View, const FPostProcessingInputs& Inputs)
@@ -108,7 +108,7 @@ void FCustomMeshPassSceneViewExtension::PrePostProcessPass_RenderThread(FRDGBuil
 		}, true);
 }
 
-bool FCustomMeshPassSceneViewExtension::CustomStaticMeshVisibilityRelevance_RenderThread(EShadingPath ShadingPath, const FPrimitiveViewRelevance& ViewRelevance, const FMeshBatch* Mesh, const FPrimitiveSceneProxy* Proxy)
+bool FCustomMeshPassSceneViewExtension::CustomMeshVisibilityRelevance_RenderThread(EShadingPath ShadingPath, const FPrimitiveViewRelevance& ViewRelevance, const FMeshBatch* Mesh, const FPrimitiveSceneProxy* Proxy)
 {
 	if (ShadingPath != EShadingPath::Deferred)
 	{

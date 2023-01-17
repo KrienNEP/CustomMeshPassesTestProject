@@ -15,5 +15,5 @@ public:
 	virtual void PrePostProcessPass_RenderThread(FRDGBuilder& GraphBuilder, const FSceneView& View, const FPostProcessingInputs& Inputs) override;
 	//~ End FSceneViewExtensionBase Interface
 	
-	bool CustomStaticMeshVisibilityRelevance_RenderThread(EShadingPath ShadingPath, const FPrimitiveViewRelevance& ViewRelevance, const FMeshBatch* Mesh, const FPrimitiveSceneProxy* Proxy);
+	bool CustomMeshVisibilityRelevance_RenderThread(EShadingPath ShadingPath, const FPrimitiveViewRelevance& ViewRelevance, const FMeshBatch* Mesh, const FPrimitiveSceneProxy* Proxy);
 };
